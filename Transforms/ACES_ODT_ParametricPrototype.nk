@@ -1,26 +1,29 @@
 set cut_paste_input [stack 0]
-version 11.0 v2
+version 11.1 v1
 push $cut_paste_input
 Group {
  name ODT
  knobChanged "\nnode = nuke.thisNode()\nknob = nuke.thisKnob()\n\nif knob.name() in \['displayPrimaries','displayWhitePoint']:\n    displayPrimaries = \{\}\n    \n    displayPrimaries\['P3']      = \[\[ 0.68000,  0.32000],\[ 0.26500,  0.69000],\[ 0.15000,  0.06000]]\n    displayPrimaries\['Rec2020'] = \[\[ 0.70800,  0.29200],\[ 0.17000,  0.79700],\[ 0.13100,  0.04600]]\n    displayPrimaries\['Rec709']  = \[\[ 0.64000,  0.33000],\[ 0.30000,  0.60000],\[ 0.15000,  0.06000]]\n    \n    displayWhitepoints = \{\}\n    \n    displayWhitepoints\['D60'] = \[0.32168,  0.33767]\n    displayWhitepoints\['D65'] = \[0.31270,  0.32900]\n    displayWhitepoints\['DCI'] = \[0.31400,  0.35100]\n    \n    \n    \n    node.knob('bxy').setFlag(nuke.KNOB_CHANGED_RECURSIVE)\n    node.knob('wxy').setFlag(nuke.KNOB_CHANGED_RECURSIVE)\n    \n    \n    if knob.name() == 'displayPrimaries':\n        if knob.value() not in  \[\"Custom\",\"XYZ\"]:\n            print knob.value()\n            displayPrimaryValues = displayPrimaries.get(knob.value(), None)\n            print displayPrimaryValues\n            node.knob('rxy').setValue(displayPrimaryValues\[0])\n            node.knob('gxy').setValue(displayPrimaryValues\[1]) \n            node.knob('bxy').setValue(displayPrimaryValues\[2])\n            node.knob('rxy').setEnabled(False)\n            node.knob('gxy').setEnabled(False)\n            node.knob('bxy').setEnabled(False)\n        elif knob.value() == \"Custom\":\n            node.knob('rxy').setEnabled(True)\n            node.knob('gxy').setEnabled(True)\n            node.knob('bxy').setEnabled(True)\n    \n    if knob.name() == 'displayWhitePoint':\n        if knob.value() not in  \[\"Custom\"]:\n            displayWhitepointValues = displayWhitepoints.get(knob.value(), None)\n            print displayWhitepointValues\n            node.knob('wxy').setValue(displayWhitepointValues)\n            node.knob('wxy').setEnabled(False)\n        else:\n            node.knob('wxy').setEnabled(True)\n\n"
  tile_color 0x8800ffff
  label "<font size=1>Output Device Transform \n\[value displayPrimaries] Primaries\n\[value displayWhitePoint] Whitepoint\nGamma \[value temp_expr0]\n<font color=darkgrey>Parametric b001"
- note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos -61
- ypos -76
+ xpos -124
+ ypos -66
  addUserKnob {20 Options}
  addUserKnob {4 dimVsDark l Surround M {"Dark Surround" "Dim Surround" ""}}
  addUserKnob {4 displayPrimaries l "Display Primaries" M {P3 Rec2020 Rec709 Custom ""}}
  addUserKnob {4 displayWhitePoint l "Display White Point" M {D60 D65 DCI Custom ""}}
+ displayWhitePoint D65
  addUserKnob {26 ""}
  addUserKnob {41 rxy l "<font color=tomato>Red Primary" T PrimariesToXYZ.rxy}
  addUserKnob {41 gxy l "<font color=lightgreen>Green Primary" T PrimariesToXYZ.gxy}
  addUserKnob {41 bxy l "<font color=lightblue>Blue Primary" T PrimariesToXYZ.bxy}
  addUserKnob {26 ""}
  addUserKnob {41 wxy l Whitepoint T PrimariesToXYZ.wxy}
+ addUserKnob {26 ""}
+ addUserKnob {41 adapted_white l "Adaptated White" -STARTLINE T adaptation.illuminant_out}
  addUserKnob {26 ""}
  addUserKnob {4 eotf l "Display EOTF" +DISABLED M {Gamma sRGB ST2084}}
  addUserKnob {41 temp_expr0 l Gamma -STARTLINE T Expression12.temp_expr0}
@@ -88,7 +91,7 @@ Group {
   xpos 302
   ypos -305
  }
-set N5861fb0 [stack 0]
+set N5652e810 [stack 0]
  ColorMatrix {
   matrix {
       {0.695452 0.140679 0.163869}
@@ -106,7 +109,7 @@ set N5861fb0 [stack 0]
   xpos 303
   ypos -17
  }
-set N586a5b0 [stack 0]
+set N56380f00 [stack 0]
  Dot {
   name Dot45
   label B
@@ -125,7 +128,7 @@ set N586a5b0 [stack 0]
  Group {
   name segmented_spline_c9_fwd2
   tile_color 0x33ffb3ff
-  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 411
   ypos 163
@@ -206,7 +209,7 @@ set N586a5b0 [stack 0]
    xpos -315
    ypos 350
   }
-set N5889710 [stack 0]
+set N563b9030 [stack 0]
   Dot {
    name Dot59
    xpos -671
@@ -283,7 +286,7 @@ set N5889710 [stack 0]
    addUserKnob {7 N_KNOTS_HIGH}
    N_KNOTS_HIGH {{parent.N_KNOTS_HIGH}}
   }
-set N588de90 [stack 0]
+set N563bd7d0 [stack 0]
   Shuffle {
    red alpha
    green alpha
@@ -293,7 +296,7 @@ set N588de90 [stack 0]
    xpos -585
    ypos 621
   }
-push $N5889710
+push $N563b9030
   Dot {
    name Dot60
    xpos 235
@@ -388,7 +391,7 @@ push $N5889710
    xpos -191
    ypos 836
   }
-push $N588de90
+push $N563bd7d0
   Shuffle {
    red blue
    green blue
@@ -398,13 +401,13 @@ push $N588de90
    xpos -666
    ypos 622
   }
-push $N5889710
+push $N563b9030
   Dot {
    name Dot62
    xpos -68
    ypos 389
   }
-set N58cee90 [stack 0]
+set N5661fff0 [stack 0]
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -494,7 +497,7 @@ set N58cee90 [stack 0]
    xpos -102
    ypos 485
   }
-push $N58cee90
+push $N5661fff0
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -602,7 +605,7 @@ push $N58cee90
    ypos 834
   }
 push 0
-push $N588de90
+push $N563bd7d0
   Shuffle {
    green red
    blue red
@@ -612,7 +615,7 @@ push $N588de90
    xpos -830
    ypos 622
   }
-push $N5889710
+push $N563b9030
   Dot {
    name Dot64
    xpos -448
@@ -706,7 +709,7 @@ push $N5889710
    xpos -563
    ypos 838
   }
-push $N588de90
+push $N563bd7d0
   Shuffle {
    red green
    blue green
@@ -716,13 +719,13 @@ push $N588de90
    xpos -746
    ypos 619
   }
-push $N5889710
+push $N563b9030
   Dot {
    name Dot66
    xpos -315
    ypos 394
   }
-set N5943b20 [stack 0]
+set N56571790 [stack 0]
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -812,7 +815,7 @@ set N5943b20 [stack 0]
    xpos -349
    ypos 484
   }
-push $N5943b20
+push $N56571790
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -957,7 +960,7 @@ push $N5943b20
   ypos 213
  }
 push 0
-push $N586a5b0
+push $N56380f00
  Dot {
   name Dot57
   label R
@@ -976,7 +979,7 @@ push $N586a5b0
  Group {
   name segmented_spline_c9_fwd
   tile_color 0x33ffb3ff
-  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 117
   ypos 149
@@ -1057,7 +1060,7 @@ push $N586a5b0
    xpos -315
    ypos 350
   }
-set N59ba650 [stack 0]
+set N567013e0 [stack 0]
   Dot {
    name Dot59
    xpos -671
@@ -1134,7 +1137,7 @@ set N59ba650 [stack 0]
    addUserKnob {7 N_KNOTS_HIGH}
    N_KNOTS_HIGH {{parent.N_KNOTS_HIGH}}
   }
-set N59bedd0 [stack 0]
+set N56705b80 [stack 0]
   Shuffle {
    red alpha
    green alpha
@@ -1144,7 +1147,7 @@ set N59bedd0 [stack 0]
    xpos -585
    ypos 621
   }
-push $N59ba650
+push $N567013e0
   Dot {
    name Dot60
    xpos 235
@@ -1239,7 +1242,7 @@ push $N59ba650
    xpos -191
    ypos 836
   }
-push $N59bedd0
+push $N56705b80
   Shuffle {
    red blue
    green blue
@@ -1249,13 +1252,13 @@ push $N59bedd0
    xpos -666
    ypos 622
   }
-push $N59ba650
+push $N567013e0
   Dot {
    name Dot62
    xpos -68
    ypos 389
   }
-set N5a03de0 [stack 0]
+set N56746c00 [stack 0]
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -1345,7 +1348,7 @@ set N5a03de0 [stack 0]
    xpos -102
    ypos 485
   }
-push $N5a03de0
+push $N56746c00
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -1453,7 +1456,7 @@ push $N5a03de0
    ypos 834
   }
 push 0
-push $N59bedd0
+push $N56705b80
   Shuffle {
    green red
    blue red
@@ -1463,7 +1466,7 @@ push $N59bedd0
    xpos -830
    ypos 622
   }
-push $N59ba650
+push $N567013e0
   Dot {
    name Dot64
    xpos -448
@@ -1557,7 +1560,7 @@ push $N59ba650
    xpos -563
    ypos 838
   }
-push $N59bedd0
+push $N56705b80
   Shuffle {
    red green
    blue green
@@ -1567,13 +1570,13 @@ push $N59bedd0
    xpos -746
    ypos 619
   }
-push $N59ba650
+push $N567013e0
   Dot {
    name Dot66
    xpos -315
    ypos 394
   }
-set N5a748e0 [stack 0]
+set N58821cf0 [stack 0]
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -1663,7 +1666,7 @@ set N5a748e0 [stack 0]
    xpos -349
    ypos 484
   }
-push $N5a748e0
+push $N58821cf0
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -1807,7 +1810,7 @@ push $N5a748e0
   xpos 151
   ypos 199
  }
-push $N586a5b0
+push $N56380f00
  Dot {
   name Dot69
   label G
@@ -1826,7 +1829,7 @@ push $N586a5b0
  Group {
   name segmented_spline_c9_fwd1
   tile_color 0x33ffb3ff
-  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 269
   ypos 161
@@ -1907,7 +1910,7 @@ push $N586a5b0
    xpos -315
    ypos 350
   }
-set N5aeb1c0 [stack 0]
+set N588982f0 [stack 0]
   Dot {
    name Dot59
    xpos -671
@@ -1984,7 +1987,7 @@ set N5aeb1c0 [stack 0]
    addUserKnob {7 N_KNOTS_HIGH}
    N_KNOTS_HIGH {{parent.N_KNOTS_HIGH}}
   }
-set N5aef940 [stack 0]
+set N5889ca90 [stack 0]
   Shuffle {
    red alpha
    green alpha
@@ -1994,7 +1997,7 @@ set N5aef940 [stack 0]
    xpos -585
    ypos 621
   }
-push $N5aeb1c0
+push $N588982f0
   Dot {
    name Dot60
    xpos 235
@@ -2089,7 +2092,7 @@ push $N5aeb1c0
    xpos -191
    ypos 836
   }
-push $N5aef940
+push $N5889ca90
   Shuffle {
    red blue
    green blue
@@ -2099,13 +2102,13 @@ push $N5aef940
    xpos -666
    ypos 622
   }
-push $N5aeb1c0
+push $N588982f0
   Dot {
    name Dot62
    xpos -68
    ypos 389
   }
-set N5b34830 [stack 0]
+set N588ddb10 [stack 0]
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -2195,7 +2198,7 @@ set N5b34830 [stack 0]
    xpos -102
    ypos 485
   }
-push $N5b34830
+push $N588ddb10
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -2303,7 +2306,7 @@ push $N5b34830
    ypos 834
   }
 push 0
-push $N5aef940
+push $N5889ca90
   Shuffle {
    green red
    blue red
@@ -2313,7 +2316,7 @@ push $N5aef940
    xpos -830
    ypos 622
   }
-push $N5aeb1c0
+push $N588982f0
   Dot {
    name Dot64
    xpos -448
@@ -2407,7 +2410,7 @@ push $N5aeb1c0
    xpos -563
    ypos 838
   }
-push $N5aef940
+push $N5889ca90
   Shuffle {
    red green
    blue green
@@ -2417,13 +2420,13 @@ push $N5aef940
    xpos -746
    ypos 619
   }
-push $N5aeb1c0
+push $N588982f0
   Dot {
    name Dot66
    xpos -315
    ypos 394
   }
-set N5ba5440 [stack 0]
+set N589527c0 [stack 0]
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -2513,7 +2516,7 @@ set N5ba5440 [stack 0]
    xpos -349
    ypos 484
   }
-push $N5ba5440
+push $N589527c0
   Expression {
    temp_name0 logx
    temp_expr0 "log10( max(r, 5.96046448e-08 ))"
@@ -2686,19 +2689,20 @@ push $N5ba5440
   ypos 575
  }
  Multiply {
-  value {{1/PrimariesToXYZ.maxVal}}
+  value {{"adaptation.illuminant_out==14 ? 1/PrimariesToXYZ.maxVal : 1"}}
   name Multiply1
   label "// Scale and clamp white to avoid casted highlights due to D60 simulation"
+  selected true
   xpos 268
-  ypos 756
+  ypos 757
  }
-set N5470830 [stack 0]
+set N4f50c2e0 [stack 0]
  Dot {
   name Dot3
   xpos 302
   ypos 882
  }
-set N54761d0 [stack 0]
+set N564d23f0 [stack 0]
  Gamma {
   value {{1/DIM_SURROUND_GAMMA}}
   name Gamma2
@@ -2724,11 +2728,13 @@ set N54761d0 [stack 0]
   rgb2Y {0.134004 0.674082 0.00406073}
   addUserKnob {6 rgb2Y_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
   addUserKnob {6 rgb2Y_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 rgb2Y_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 rgb2Y_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
   addUserKnob {6 AP1_RGB2Y_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
   addUserKnob {7 sat}
   sat 0.93
  }
-push $N54761d0
+push $N564d23f0
  Switch {
   inputs 2
   which {{parent.dimVsDark}}
@@ -2747,7 +2753,16 @@ push $N54761d0
   xpos 262
   ypos 1502
  }
-set N548a310 [stack 0]
+set N589cf7c0 [stack 0]
+ Colorspace {
+  colorspace_in CIE-XYZ
+  illuminant_in ACES
+  colorspace_out CIE-XYZ
+  bradford_matrix true
+  name adaptation
+  xpos 348
+  ypos 1563
+ }
  Group {
   name PrimariesToXYZ
   knobChanged "node  = nuke.thisNode()\n\n## alex@alexfry.com\n## based on examples code here: http://www.ryanjuckett.com/ programming/rgb-color-space-conversion/\n\nxyzMatrix = nuke.math.Matrix3()\n\n##m.set(0.64,0.33,0.03,0.30,0.60,0.10,0.15,0.06, 0.79)\n#xyzMatrix.set(0.64,.3,.15,.33,.6,.06,.03,.1,.79)\n\nrxy = node.knob('rxy').getValue()\ngxy = node.knob('gxy'). getValue()\nbxy = node.knob('bxy').getValue()\nwxy = node.knob('wxy').getValue()\n\nwxyz = nuke.math.Vector3(wxy\[0],wxy\[1],(1- wxy\[0]-wxy\[1]))\nwXYZ = nuke.math.Vector3( wxyz\[0]/wxyz\[1] , wxyz\[1]/wxyz\[1] , wxyz\[2]/wxyz\[1])\n\nrxyz = nuke.math. Vector3(rxy\[0],rxy\[1],(1-rxy\[0]-rxy\[1]))\ngxyz = nuke.math.Vector3(gxy\[0],gxy\[1],(1-gxy\[0]-gxy\[1]))\nbxyz = nuke.math. Vector3(bxy\[0],bxy\[1],(1-bxy\[0]-bxy\[1]))\n\nxyzMatrix.set(rxyz\[0],gxyz\[0],bxyz\[0],rxyz\[1],gxyz\[1],bxyz\[1],rxyz\[2],  gxyz\[2],bxyz\[2])\n\ninverseXyzMatrix = xyzMatrix.inverse()\nscalarValues = inverseXyzMatrix * wXYZ\n\nscalarMatrix = nuke.math.Matrix3()\nscalarMatrix.set(scalarValues\[0],0,0,0,scalarValues\[1],0,0,0,scalarValues\[2])\n\nfinalMatrix = xyzMatrix *   scalarMatrix\n\nfinalMatrixNormalized = nuke.math.Matrix3()\nfinalMatrixNormalized.set((finalMatrix\[0]/(finalMatrix\[0]+finalMatrix\[3]+finalMatrix\[6])),(finalMatrix\[3]/(finalMatrix\[0]+finalMatrix\[3]+finalMatrix\[6])),(finalMatrix\[6]/(finalMatrix\[0]+finalMatrix\[3]+finalMatrix\[6])),(finalMatrix\[1]/(finalMatrix\[1]+finalMatrix\[4]+finalMatrix\[7])),(finalMatrix\[4]/(finalMatrix\[1]+finalMatrix\[4]+finalMatrix\[7])),(finalMatrix\[7]/(finalMatrix\[1]+finalMatrix\[4]+finalMatrix\[7]))  ,(finalMatrix\[2]/(finalMatrix\[2]+finalMatrix\[5]+finalMatrix\[8])),(finalMatrix\[5]/(finalMatrix\[2]+finalMatrix\[5]+finalMatrix\[8])),(finalMatrix\[8]/(finalMatrix\[2]+finalMatrix\[5]+finalMatrix\[8])))\n\nfinalMatrixInverse = finalMatrix.inverse()\nfinalMatrixNormalizedInverse = finalMatrixNormalized.inverse()\n\nif node.knob('direction').getValue() == 0:\n    if node.knob('normalized').getValue() == False:\n        node.knob('matrix').  setValue(\[finalMatrix\[0],finalMatrix\[3],finalMatrix\[6],finalMatrix\[1],finalMatrix\[4],finalMatrix\[7],finalMatrix\[2], finalMatrix\[5],finalMatrix\[8]])\n    else:\n        node.knob('matrix').  setValue(\[finalMatrixNormalized\[0],finalMatrixNormalized\[3],finalMatrixNormalized\[6],finalMatrixNormalized\[1],finalMatrixNormalized\[4],finalMatrixNormalized\[7],finalMatrixNormalized\[2], finalMatrixNormalized\[5],finalMatrixNormalized\[8]])\nelse:\n    if node.knob('normalized').getValue() == False:\n        node.knob('matrix').setValue(\[finalMatrixInverse\[0],finalMatrixInverse\[3],  finalMatrixInverse\[6],finalMatrixInverse\[1],finalMatrixInverse\[4],finalMatrixInverse\[7],finalMatrixInverse\[2], finalMatrixInverse\[5],finalMatrixInverse\[8]])\n    else:\n        node.knob('matrix').setValue(\[finalMatrixNormalizedInverse\[0],finalMatrixNormalizedInverse\[3],  finalMatrixNormalizedInverse\[6],finalMatrixNormalizedInverse\[1],finalMatrixNormalizedInverse\[4],finalMatrixNormalizedInverse\[7],finalMatrixNormalizedInverse\[2], finalMatrixNormalizedInverse\[5],finalMatrixNormalizedInverse\[8]])"
@@ -2764,7 +2779,7 @@ set N548a310 [stack 0]
   bxy {0.15 0.06}
   addUserKnob {26 ""}
   addUserKnob {12 wxy l Whitepoint +DISABLED}
-  wxy {0.32168 0.33767}
+  wxy {0.3127 0.329}
   addUserKnob {26 ""}
   addUserKnob {4 direction t "Which direction should transform matrix go?" M {"RGB to XYZ" "XYZ to RGB"}}
   direction "XYZ to RGB"
@@ -2775,10 +2790,14 @@ set N548a310 [stack 0]
   maxInputVal {0.9526462555 1 1.019974351}
   addUserKnob {6 maxInputVal_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
   addUserKnob {6 maxInputVal_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 maxInputVal_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 maxInputVal_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
   addUserKnob {18 maxOutputVal}
   maxOutputVal {{(maxInputVal.r*matrix.0)+(maxInputVal.g*matrix.1)+(maxInputVal.b*matrix.2)} {(maxInputVal.r*matrix.3)+(maxInputVal.g*matrix.4)+(maxInputVal.b*matrix.5)} {(maxInputVal.r*matrix.6)+(maxInputVal.g*matrix.7)+(maxInputVal.b*matrix.8)}}
   addUserKnob {6 maxOutputVal_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
   addUserKnob {6 maxOutputVal_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 maxOutputVal_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 maxOutputVal_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
   addUserKnob {7 maxVal}
   maxVal {{max(maxOutputVal.r,max(maxOutputVal.g,maxOutputVal.b))}}
   addUserKnob {26 ""}
@@ -2815,9 +2834,9 @@ set N548a310 [stack 0]
   }
   ColorMatrix {
    matrix {
-       {2.402739763 -0.8974835277 -0.3880531788}
-       {-0.8325794339 1.769231319 0.02371272072}
-       {0.03882338107 -0.08249969035 1.036368608}
+       {2.493495464 -0.9313831329 -0.4027105868}
+       {-0.8294886947 1.762663484 0.02362468652}
+       {0.03584581986 -0.07617236674 0.9568843246}
      }
    name PrimariesToXYZ
    xpos -542
@@ -2846,7 +2865,7 @@ set N548a310 [stack 0]
   xpos 255
   ypos 1782
  }
-push $N5861fb0
+push $N5652e810
  Dot {
   name Dot2
   xpos 706
@@ -2871,17 +2890,6 @@ push $N5861fb0
   xpos 255
   ypos 1985
  }
- Gamma {
-  inputs 0
-  value {{DIM_SURROUND_GAMMA}}
-  name Gamma1
-  label darkSurround_to_dimSurround
-  xpos 469
-  ypos 866
-  addUserKnob {20 User}
-  addUserKnob {7 DIM_SURROUND_GAMMA}
-  DIM_SURROUND_GAMMA 0.9811
- }
  Constant {
   inputs 0
   channels rgb
@@ -2890,14 +2898,14 @@ push $N5861fb0
   xpos 423
   ypos 1383
  }
-push $N5470830
+push $N4f50c2e0
  Viewer {
   frame_range 1-100
   name Viewer1
   xpos 53
   ypos 957
  }
-push $N548a310
+push $N589cf7c0
  ColorMatrix {
   matrix {
       {2.402741414 -0.8974841639 -0.38805337}
@@ -2908,5 +2916,16 @@ push $N548a310
   label "    // CIE XYZ to display primaries\n    linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);"
   xpos 262
   ypos 1586
+ }
+ Gamma {
+  inputs 0
+  value {{DIM_SURROUND_GAMMA}}
+  name Gamma1
+  label darkSurround_to_dimSurround
+  xpos 469
+  ypos 866
+  addUserKnob {20 User}
+  addUserKnob {7 DIM_SURROUND_GAMMA}
+  DIM_SURROUND_GAMMA 0.9811
  }
 end_group
